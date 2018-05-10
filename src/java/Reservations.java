@@ -37,17 +37,16 @@ public class Reservations implements Serializable {
     public String getMylogin() {
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
-        //setUsername(login.getLogin()); 
         return login.getLogin();
     }
     
     public void setMylogin(String mylogin) {
         this.mylogin = mylogin;
-        //username = mylogin; 
     }
     
     public String getUsername() {
         return username;
+        //return login.getLogin(); 
     }
 
     public void setUsername(String username) {
@@ -96,15 +95,6 @@ public class Reservations implements Serializable {
         this.roomNum = roomNum; 
     }
     
-    /*public Date getCreated_date() {
-        return created_date;
-    }
-
-    public void setCreated_date(Date created_date) {
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
-        this.created_date = created_date;
-    }*/
-    
     public List<Reservations> checkReservation() throws SQLException {
         Connection con = dbConnect.getConnection();
         if (con == null) {
@@ -116,7 +106,7 @@ public class Reservations implements Serializable {
                 + "(r.roomnum = rms.roomnum) join bedinfo on (bedid = id)"
                 + "where custlogin = ?";
         PreparedStatement ps = con.prepareStatement(select);
-        ps.setString(1, username); 
+        ps.setString(1, login.getLogin()); 
         ResultSet result = ps.executeQuery();
         
         List<Reservations> list = new ArrayList<Reservations>();
@@ -159,11 +149,10 @@ public class Reservations implements Serializable {
             return "badReservation";
         }
         PreparedStatement preparedStatement = con.prepareStatement(insert);
-        preparedStatement.setString(1, username); 
+        preparedStatement.setString(1, login.getLogin()); 
         preparedStatement.setDate(2, new java.sql.Date(checkIn.getTime()));
         preparedStatement.setDate(3, new java.sql.Date(checkOut.getTime()));
         preparedStatement.setInt(4, roomNum);
-        //preparedStatement.setDate(8, new java.sql.Date(created_date.getTime()));
         preparedStatement.executeUpdate();
         statement.close();
         con.commit();
@@ -260,7 +249,7 @@ public class Reservations implements Serializable {
         String select = "select count(*) countrows from reservations where "
                 + "custlogin = ? and checkin = ? and checkout = ?";
         PreparedStatement ps = con.prepareStatement(select);
-        ps.setString(1, username); 
+        ps.setString(1, mylogin); 
         ps.setDate(2, new java.sql.Date(checkIn.getTime()));
         ps.setDate(3, new java.sql.Date(checkOut.getTime())); 
         ResultSet result = ps.executeQuery();
@@ -289,7 +278,7 @@ public class Reservations implements Serializable {
                 + " where custlogin = ? and checkin = ? and checkout = ?"
                 + " and r.roomnum = ?";
         PreparedStatement ps = con.prepareStatement(select);
-        ps.setString(1, username);
+        ps.setString(1, mylogin);
         ps.setDate(2, new java.sql.Date(checkIn.getTime()));
         ps.setDate(3, new java.sql.Date(checkOut.getTime()));
         ps.setInt(4, roomNum);
@@ -305,6 +294,37 @@ public class Reservations implements Serializable {
         return res;
     }
     
+    public String checkInCustomer() throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        } 
+        String select = "select * from reservations r join rooms rm on "
+                + "(r.roomnum = rm.roomnum) where custlogin = ? and checkin = "
+                + "current_date;";
+        PreparedStatement ps = con.prepareStatement(select); 
+        ps.setString(1, username); 
+        ResultSet rs = ps.executeQuery(); 
+        rs.next();
+        setCheckIn(rs.getDate("checkin"));
+        setCheckOut(rs.getDate("checkout"));
+        setRoomNum(rs.getInt("roomnum")); /* why is this telling me that resultset is not positioned properly */ 
+        rs.close();
+        con.close();
+        return "checkedIn";
+    }
+    
+    /*public String checkOutCustomer() throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        
+        
+    }*/
+    
     public String goBack() {
         return "goBack";
     }
@@ -315,5 +335,9 @@ public class Reservations implements Serializable {
     
     public String tryAgain() {
         return "tryAgain"; 
+    }
+    
+    public String showRes() {
+        return "showRes"; 
     }
 }

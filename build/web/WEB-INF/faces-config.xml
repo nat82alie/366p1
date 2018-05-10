@@ -92,7 +92,7 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>viewReservation</from-outcome>
-            <to-view-id>/viewReservation.xhtml</to-view-id>
+            <to-view-id>/findReservations.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>createReservation</from-outcome>
@@ -117,6 +117,39 @@
         <navigation-case>
             <from-outcome>showAllCustomers</from-outcome>
             <to-view-id>/showAllCustomers.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- check in customer --> 
+    <navigation-rule> 
+        <from-view-id>
+            /checkInCustomer.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>checkedIn</from-outcome>
+            <to-view-id>/successfulReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- check out customer --> 
+    <navigation-rule> 
+        <from-view-id>
+            /checkOutCustomer.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>checkedOut</from-outcome>
+            <to-view-id>/successfulReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- finding/viewing one reservation --> 
+    <navigation-rule> 
+        <from-view-id>
+            /findReservations.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>showRes</from-outcome>
+            <to-view-id>/viewReservation.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     

@@ -13,22 +13,30 @@
     <cc:implementation>
 
         <h:panelGrid columns="3">
-            <f:event listener="#{reservations.validateDates}" type="postValidate" />
 
+            Customer Username: <h:inputText value="#{reservations.username}" required ="true"
+                                  requiredMessage="Your must enter Customer Username"
+                                  id="userId"/>
+            <h:message for="userId" style="color:red;margin:8px;"/>
+            Room Number: <h:inputText value="#{reservations.roomNum}" required ="true"
+                                   requiredMessage="Please type in the room number"
+                                   id="roomNum">
+            </h:inputText>
+            <h:message for="roomNum" style="color:red;margin:8px;"/>
             Check In Date: <h:inputText value="#{reservations.checkIn}" required ="true"
                                   requiredMessage="Your must enter a check in date"
                                   converterMessage="Illegal date (should be mm-dd-yyyy)"
-                                  id="checkInRemove">
+                                  id="checkInDate">
                 <f:convertDateTime pattern="MM-dd-yyyy"/>
             </h:inputText>
-            <h:message for="checkInRemove" style="color:red;margin:8px;"/>
+            <h:message for="checkInDate" style="color:red;margin:8px;"/>
             Check Out Date: <h:inputText value="#{reservations.checkOut}" required ="true"
                                   requiredMessage="Your must enter a check out date"
                                   converterMessage="Illegal date (should be mm-dd-yyyy)"
-                                  id="checkOutRemove">
+                                  id="checkOutDate">
                 <f:convertDateTime pattern="MM-dd-yyyy"/>
             </h:inputText>
-            <h:message for="checkOutRemove" style="color:red;margin:8px;"/>
+            <h:message for="checkOutDate" style="color:red;margin:8px;"/>
             
         </h:panelGrid>
 
