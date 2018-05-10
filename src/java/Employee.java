@@ -157,11 +157,10 @@ public class Employee implements Serializable {
         con.setAutoCommit(false);
 
         Statement statement = con.createStatement();
-        statement.executeUpdate("Delete from Employees where Login = " + emplID);
+        statement.executeUpdate("Delete from Employees where Login = '" + emplID + "'");
         statement.close();
         con.commit();
         con.close();
-        Util.invalidateUserSession();
         return "main";
     }
 
