@@ -123,7 +123,7 @@
     <!-- to show successful/unsuccessful reservation --> 
     <navigation-rule> 
         <from-view-id>
-            /newReservation.xhtml
+            /createYourReservation.xhtml
         </from-view-id>
         <navigation-case>  
             <from-outcome>successful</from-outcome>
@@ -132,7 +132,7 @@
     </navigation-rule>
     <navigation-rule> 
         <from-view-id>
-            /newReservation.xhtml
+            /createYourReservation.xhtml
         </from-view-id>
         <navigation-case>  
             <from-outcome>badReservation</from-outcome>
@@ -145,7 +145,16 @@
         </from-view-id>
         <navigation-case>  
             <from-outcome>goBack</from-outcome>
-            <to-view-id>/newReservation.xhtml</to-view-id>
+            <to-view-id>/createYourReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule> 
+        <from-view-id>
+            /successfulReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>goHome</from-outcome>
+            <to-view-id>/start.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     

@@ -296,6 +296,10 @@ public class Reservations implements Serializable {
         return "goBack";
     }
     
+    public String goHome() {
+        return "goHome"; 
+    }
+    
     /* this goes to facesmessage error even though it should be valid */ 
     public void validateDates(ComponentSystemEvent event) throws SQLException {
         //FacesContext fc = FacesContext.getCurrentInstance();

@@ -34,8 +34,13 @@
                 <f:facet name="header"> Bed Type </f:facet>
                     #{r.bedType}
             </h:column>            
-            
         </h:dataTable>
+        
+        <h:form>
+        <h:panelGrid>
+            <h:commandButton value="Go Home" action="#{reservations.goHome}"/>
+        </h:panelGrid>
+        </h:form>
     </h:body>
 </html>
 
