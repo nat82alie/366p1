@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <title>Reservation Successful!</title>
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <h1>Reservation Successful!</h1>
+    </h:head>
+    <h:body> 
+        <h:dataTable value="#{reservations.getReservation()}" var="r" border="1">
+
+            <h:column>
+                <f:facet name="header"> Check In Date </f:facet>
+                    #{r.checkIn}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header"> Check Out Date</f:facet>
+                    #{r.checkOut}
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Room Number</f:facet>
+                    #{r.roomNum}
+            </h:column>            
+
+            <h:column>
+                <f:facet name="header"> Room View </f:facet>
+                    #{r.view}
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header"> Bed Type </f:facet>
+                    #{r.bedType}
+            </h:column>            
+            
+        </h:dataTable>
+    </h:body>
+</html>
+
