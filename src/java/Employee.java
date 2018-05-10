@@ -268,7 +268,7 @@ public class Employee implements Serializable {
         return false;
     }
     
-    public void changepass() throws SQLException {
+    public String changepass() throws SQLException {
         DBConnect dbc = new DBConnect();
         Connection con = dbc.getConnection();
         con.setAutoCommit(false);
@@ -283,5 +283,6 @@ public class Employee implements Serializable {
         } catch (SQLException e) {
 	con.rollback();
 	}
+        return "main";
     }
 }
