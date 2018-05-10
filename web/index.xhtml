@@ -27,7 +27,7 @@
                                          validator="#{login.validate}"
                                          id="password"/>
                 <h:message for="password" style="color:red;margin:8px;"/>
-
+                <h5><h:link value="Don't have an account? Sign up here!" outcome="addCustomer.xhtml" /></h5>
             </h:panelGrid>
             <h:panelGrid>
                 <h:commandButton value="Go" action="#{login.go}"/>

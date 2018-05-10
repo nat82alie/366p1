@@ -13,10 +13,9 @@
 
         <h:panelGrid columns="3">
 
-            Customer Id: <h:inputText value="#{customer.customerID}" required ="true"
-                                  requiredMessage="Your must enter Customer ID"
-                                  validator="#{customer.customerIDExists}"
-                                  converterMessage="Customer ID must be an integer"
+            Customer Id: <h:inputText value="#{customer.userLogin}" required ="true"
+                                  requiredMessage="Your must enter Customer Username"
+                                  validator="#{customer.customerLoginExists}"
                                   id="userId"/>
             <h:message for="userId" style="color:red;margin:8px;"/>
         </h:panelGrid>

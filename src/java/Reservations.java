@@ -39,7 +39,7 @@ public class Reservations implements Serializable {
     private Integer roomNum; 
 
     public String getMylogin() {
-         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
         return login.getLogin();
     }

@@ -120,6 +120,17 @@
         </navigation-case>
     </navigation-rule>
     
+    <!-- create customer success go to homepage --> 
+    <navigation-rule> 
+        <from-view-id>
+            /addCustomer.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>main</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
     <!-- to show successful/unsuccessful reservation --> 
     <navigation-rule> 
         <from-view-id>

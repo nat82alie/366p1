@@ -1,16 +1,92 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Add Customer</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO: Add Customer</div>
-    </body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <title>New Customer</title>
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <h1>New Customer</h1>
+    </h:head>
+    <h:body>
+        <h:form>
+            
+            <h:panelGrid columns="1">
+                
+                Username: <h:inputText value="#{customer.userLogin}" required ="true"
+                                      requiredMessage="Your must enter a login"
+                                      validator="#{customer.validateCustomerLogin}"
+                                      validatorMessage="username already exists"
+                                      id="userLogin"/>
+                <h:message for="userLogin" style="color:red;margin:8px;"/>
+                
+                Password: <h:inputText value="#{customer.userPwd}" required ="true"
+                                      requiredMessage="Your must enter a password"
+                                      validatorMessage="Password must be at least eight characters"
+                                      id="userPassword">
+                    <f:validateLength minimum="8"/>
+                </h:inputText>
+                <h:message for="userPassword" style="color:red;margin:8px;"/>
+
+                First Name: <h:inputText value="#{customer.FName}" required ="true"
+                                   requiredMessage="Your must enter First Name"
+                                   id="firstName">
+                </h:inputText>
+                <h:message for="firstName" style="color:red;margin:8px;"/>
+                
+                Last Name: <h:inputText value="#{customer.LName}" required ="true"
+                                   requiredMessage="Your must enter Last Name"
+                                   id="lastName"/>
+                <h:message for="lastName" style="color:red;margin:8px;"/>
+                
+                Email: <h:inputText value="#{customer.email}" required ="true"
+                                   requiredMessage="Your must enter your email"
+                                   id="userEmail">
+                </h:inputText>
+                <h:message for="userEmail" style="color:red;margin:8px;"/>
+
+                Address: <h:inputText value="#{customer.address}" required ="true"
+                                      requiredMessage="Your must enter Customer Address"
+                                      validatorMessage="Address must be at least five characters"
+                                      id="userAddress">
+                    <f:validateLength minimum="5"/>
+                </h:inputText>
+                <h:message for="userAddress" style="color:red;margin:8px;"/>
+                
+                Credit Card Number <h:inputText value="#{customer.ccn}" required ="true"
+                                   requiredMessage="Your must enter your credit card number"
+                                   id="ccn">
+                </h:inputText>
+                <h:message for="ccn" style="color:red;margin:8px;"/>
+                
+                Card Exp Date: <h:inputText value="#{customer.expdate}" required ="true"
+                                   requiredMessage="Your must enter your card's expiration date"
+                                   converterMessage="Illegal date (should be yyyy-MM-dd)"
+                                   id="cardExpDate">
+                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                </h:inputText>
+                <h:message for="cardExpDate" style="color:red;margin:8px;"/>
+                
+                CRC Code: <h:inputText value="#{customer.crccode}" required ="true"
+                                   requiredMessage="Your must enter your card's crc code"
+                                   id="crcCode">
+                </h:inputText>
+                <h:message for="crcCode" style="color:red;margin:8px;"/>
+
+                <!--Date: <h:inputText value="{customer.created_date}" required ="true"
+                                   requiredMessage="Date Required"
+                                   converterMessage="Illegal date (should be mm/dd/yyyy)"
+                                   id="userDate">
+                <f:convertDateTime pattern="MM/dd/yyyy"/>
+                </h:inputText>
+                <h:message for="userDate" style="color:red;margin:8px;"/>-->
+            </h:panelGrid>
+            
+            <h:panelGrid>
+                <h:commandButton value="Go" action="#{customer.createCustomer}"/>
+            </h:panelGrid>
+        
+        </h:form>
+    </h:body>
 </html>
+

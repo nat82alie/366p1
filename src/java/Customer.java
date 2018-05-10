@@ -4,9 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.*;
+import java.util.*;
 import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
@@ -14,11 +13,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
-import java.util.Date;
-import java.util.TimeZone;
 import javax.el.ELContext;
 import javax.faces.bean.ManagedProperty;
-import java.time.LocalDate; 
 
 @Named(value = "customer")
 @SessionScoped
@@ -37,36 +33,54 @@ public class Customer implements Serializable {
     }
 
     private DBConnect dbConnect = new DBConnect();
-    private String fname;
-    private String lname;
+    private String userLogin;
+    private String userPwd; 
+    private String FName;
+    private String LName;
     private String email;
     private String address;
     private String ccn;
-    private String exp_date;
+    private Date expdate;
     private Integer crccode; 
     private Date created_date;
 
-    public String getLoginUser() {
+    /*public String getLoginUser() {
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
     
         return login.getLogin();
+    }*/
+    
+    public String getUserLogin() {
+        return userLogin;
+    }
+    
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin; 
+    }
+    
+    public String getUserPwd() {
+        return userPwd;
+    }
+    
+    public void setUserPwd(String userPwd) {
+        this.userPwd = userPwd; 
     }
     
     public String getFName() {
-        return fname;
+        return FName;
     }
 
-    public void setFName(String fname) {
-        this.fname = fname;
+    public void setFName(String FName) {
+        this.FName = FName;
     }
     
     public String getLName() {
-        return lname;
+        return LName;
     }
     
-    public void setLName(String lname) {
-        this.lname = lname;
+    public void setLName(String LName) {
+        this.LName = LName;
     }
     
     public String getEmail() {
@@ -85,27 +99,27 @@ public class Customer implements Serializable {
         this.address = address;
     }
     
-    public String getCCN() {
+    public String getCcn() {
         return ccn;
     }
     
-    public void setCCN(String ccn) {
+    public void setCcn(String ccn) {
         this.ccn = ccn; 
     }
     
-    public String getExpDate() {
-        return exp_date;
+    public java.util.Date getExpdate() {
+        return expdate;
     }
     
-    public void setExpDate(String exp_date) {
-        this.exp_date = exp_date; 
+    public void setExpdate(java.util.Date expdate) {
+        this.expdate = expdate; 
     }
     
-    public Integer getCRCCode() {
+    public Integer getCrccode() {
         return crccode;
     }
     
-    public void setCRCCode(Integer code) {
+    public void setCrccode(Integer code) {
         this.crccode = code; 
     }
     
@@ -129,17 +143,17 @@ public class Customer implements Serializable {
 
         Statement statement = con.createStatement();
 
-        PreparedStatement preparedStatement = con.prepareStatement("Insert into Customer values(?,?,?,?,?,?,?,?,?)");
-        preparedStatement.setString(1, getLoginUser()); // check difference between these two
-        preparedStatement.setString(2, login.getPassword());
-        preparedStatement.setString(3, fname);
-        preparedStatement.setString(4, lname);
+        PreparedStatement preparedStatement = con.prepareStatement("Insert into Customers values(?,?,?,?,?,?,?,?,?)");
+        preparedStatement.setString(1, userLogin); 
+        preparedStatement.setString(2, userPwd);
+        preparedStatement.setString(3, FName);
+        preparedStatement.setString(4, LName);
         preparedStatement.setString(5, email);
         preparedStatement.setString(6, address);
         preparedStatement.setString(7, ccn); 
-        preparedStatement.setDate(8, java.sql.Date.valueOf(exp_date));
+        preparedStatement.setDate(8, new java.sql.Date(expdate.getTime()));
         preparedStatement.setInt(9, crccode); 
-        preparedStatement.setDate(8, new java.sql.Date(created_date.getTime()));
+        //preparedStatement.setDate(8, new java.sql.Date(created_date.getTime()));
         preparedStatement.executeUpdate();
         statement.close();
         con.commit();
@@ -147,7 +161,7 @@ public class Customer implements Serializable {
         //Util.invalidateUserSession();
         return "main";
     }
-
+    
     public String deleteCustomer() throws SQLException, ParseException {
         Connection con = dbConnect.getConnection();
 
@@ -157,39 +171,12 @@ public class Customer implements Serializable {
         con.setAutoCommit(false);
 
         Statement statement = con.createStatement();
-        statement.executeUpdate("Delete from Customer where login = " + getLoginUser());
+        statement.executeUpdate("Delete from Customers where login = " + userLogin);
         statement.close();
         con.commit();
         con.close();
-        Util.invalidateUserSession();
         return "main";
     }
-
-    public String showCustomer() {
-        return "showCustomer";
-    }
-
-    /*public Customer getCustomer() throws SQLException {
-        Connection con = dbConnect.getConnection();
-
-        if (con == null) {
-            throw new SQLException("Can't get database connection");
-        }
-
-        PreparedStatement ps
-                = con.prepareStatement(
-                        "select * from customer where customer_id = " + CID);
-
-        //get customer data from database
-        ResultSet result = ps.executeQuery();
-
-        result.next();
-
-        fname = result.getString("name");
-        address = result.getString("address");
-        created_date = result.getDate("created_date");
-        return this;
-    }*/
 
     public List<Customer> getCustomerList() throws SQLException {
 
@@ -200,7 +187,7 @@ public class Customer implements Serializable {
         }
 
         PreparedStatement ps = con.prepareStatement(
-            "select login, fname, lname, email, address from customer order by lname");
+            "select login, FName, LName, email, address from customers order by LName");
 
         //get customer data from database
         ResultSet result = ps.executeQuery();
@@ -211,8 +198,9 @@ public class Customer implements Serializable {
             
             Customer cust = new Customer();
 
-            cust.setFName(result.getString("fname"));
-            cust.setLName(result.getString("lname"));
+            cust.setUserLogin(result.getString("login"));
+            cust.setFName(result.getString("FName"));
+            cust.setLName(result.getString("LName"));
             cust.setEmail(result.getString("email"));
             cust.setAddress(result.getString("address"));
             //cust.setCreated_date(result.getDate("created_date"));
@@ -234,10 +222,10 @@ public class Customer implements Serializable {
         }
     }
 
-    public void validateCustomerID(FacesContext context, UIComponent componentToValidate, Object value)
+    public void validateCustomerLogin(FacesContext context, UIComponent componentToValidate, Object value)
             throws ValidatorException, SQLException {
         String loginUser = (String) value;
-        if (existsCustomerLogin((String) loginUser)) {
+        if (existsCustomerLogin(loginUser)) {
             FacesMessage errorMessage = new FacesMessage("User already exists");
             throw new ValidatorException(errorMessage);
         }
@@ -248,8 +236,9 @@ public class Customer implements Serializable {
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
-
-        PreparedStatement ps = con.prepareStatement("select * from customer where login = " + userLogin);
+        
+        PreparedStatement ps = con.prepareStatement("select * from customers where login = ?");
+        ps.setString(1, userLogin); 
 
         ResultSet result = ps.executeQuery();
         if (result.next()) {
