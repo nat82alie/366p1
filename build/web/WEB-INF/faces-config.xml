@@ -120,6 +120,46 @@
         </navigation-case>
     </navigation-rule>
     
+    <!-- to show successful/unsuccessful employee reservation --> 
+    <navigation-rule> 
+        <from-view-id>
+            /createReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>successful</from-outcome>
+            <to-view-id>/successfulReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- good/bad cancel employee reserves --> 
+    <navigation-rule> 
+        <from-view-id>
+            /cancelReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>tryAgain</from-outcome>
+            <to-view-id>/cannotDeleteReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule> 
+        <from-view-id>
+            /cancelReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>deleted</from-outcome>
+            <to-view-id>/deletedReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule> 
+        <from-view-id>
+            /cannotDeleteReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>tryAgain</from-outcome>
+            <to-view-id>/cancelReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
     <!-- check in customer --> 
     <navigation-rule> 
         <from-view-id>
@@ -127,7 +167,7 @@
         </from-view-id>
         <navigation-case>  
             <from-outcome>checkedIn</from-outcome>
-            <to-view-id>/successfulReservation.xhtml</to-view-id>
+            <to-view-id>/checkedInRoom.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     
@@ -138,7 +178,7 @@
         </from-view-id>
         <navigation-case>  
             <from-outcome>checkedOut</from-outcome>
-            <to-view-id>/successfulReservation.xhtml</to-view-id>
+            <to-view-id>/checkedOutBills.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     
@@ -175,7 +215,7 @@
         </navigation-case>
     </navigation-rule>
     
-    <!-- to show successful/unsuccessful reservation --> 
+    <!-- to show successful/unsuccessful customer reservation --> 
     <navigation-rule> 
         <from-view-id>
             /createYourReservation.xhtml

@@ -61,9 +61,9 @@
                 
                 Card Exp Date: <h:inputText value="#{customer.expdate}" required ="true"
                                    requiredMessage="Your must enter your card's expiration date"
-                                   converterMessage="Illegal date (should be yyyy-MM-dd)"
+                                   converterMessage="Illegal date (should be MM-dd-yyyy)"
                                    id="cardExpDate">
-                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                    <f:convertDateTime pattern="MM-dd-yyyy"/>
                 </h:inputText>
                 <h:message for="cardExpDate" style="color:red;margin:8px;"/>
                 

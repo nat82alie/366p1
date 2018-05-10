@@ -87,3 +87,6 @@ insert into reservations (custlogin, checkin, checkout, roomnum) values ('amanda
 insert into reservations (custlogin, checkin, checkout, roomnum) values ('amanda', '2018-04-05', '2018-04-06', 107);
 
 insert into roomprices (roomnum, price, date) values (201, 200, '2018-07-04');
+
+insert into chargetypes (name, cost) values ('wifi', 15);
+insert into chargetypes (name, cost) values ('mini bar', 10);

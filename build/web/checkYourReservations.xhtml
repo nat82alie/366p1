@@ -11,6 +11,11 @@
     <h:body>
         <h:dataTable value="#{reservations.checkReservation()}" var="r" border="1">
             <h:column>
+                <f:facet name="header"> ID </f:facet>
+                    #{r.resid}
+            </h:column>
+            
+            <h:column>
                 <f:facet name="header"> Customer Login </f:facet>
                     #{r.mylogin}
             </h:column>

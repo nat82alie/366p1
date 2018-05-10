@@ -28,8 +28,10 @@ public class Reservations implements Serializable {
     private DBConnect dbConnect = new DBConnect();
     private String mylogin;
     private String username; 
+    private Integer resid; 
     private java.util.Date checkIn;
     private java.util.Date checkOut; 
+    private java.util.Date actualCheckOut;
     private String view;
     private String bedType;
     private Integer roomNum; 
@@ -46,11 +48,18 @@ public class Reservations implements Serializable {
     
     public String getUsername() {
         return username;
-        //return login.getLogin(); 
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+    
+    public Integer getResid() {
+        return resid;
+    }
+
+    public void setResid(Integer resid) {
+        this.resid = resid;
     }
     
     public java.util.Date getCheckIn() {
@@ -69,6 +78,14 @@ public class Reservations implements Serializable {
     public void setCheckOut (java.util.Date checkOut) {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
         this.checkOut = checkOut; 
+    }
+    
+    public java.util.Date getActualCheckOut() {
+        return actualCheckOut;
+    }
+
+    public void setActualCheckOut(java.util.Date actualCheckOut) {
+        this.actualCheckOut = actualCheckOut;
     }
     
     public String getView() {
@@ -95,6 +112,9 @@ public class Reservations implements Serializable {
         this.roomNum = roomNum; 
     }
     
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                            JUST FOR CUSTOMERS  
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     public List<Reservations> checkReservation() throws SQLException {
         Connection con = dbConnect.getConnection();
         if (con == null) {
@@ -103,8 +123,8 @@ public class Reservations implements Serializable {
         
         /* grabs information from reservations table */ 
         String select = "select * from reservations r join rooms rms on "
-                + "(r.roomnum = rms.roomnum) join bedinfo on (bedid = id)"
-                + "where custlogin = ?";
+                + "(r.roomnum = rms.roomnum) join bedinfo on (bedid = id) "
+                + "where custlogin = ? order by rid";
         PreparedStatement ps = con.prepareStatement(select);
         ps.setString(1, login.getLogin()); 
         ResultSet result = ps.executeQuery();
@@ -115,10 +135,11 @@ public class Reservations implements Serializable {
             
             Reservations res = new Reservations();
             
+            res.setResid(result.getInt("rid"));
             res.setCheckIn(result.getDate("checkin"));
             res.setCheckOut(result.getDate("checkout"));
             res.setRoomNum(result.getInt("roomnum"));
-            //res.setActualCheckout(result.getString("actualcheckout"));
+            res.setActualCheckOut(result.getDate("actualcheckout"));
             res.setView(result.getString("roomview"));
             res.setBedType(result.getString("bedtype"));
 
@@ -158,6 +179,55 @@ public class Reservations implements Serializable {
         con.commit();
         con.close();
         return "successful";
+    }
+
+    private boolean existsReservation() throws SQLException {
+        Connection con = dbConnect.getConnection();
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        
+        String select = "select count(*) countrows from reservations where "
+                + "custlogin = ? and checkin = ? and checkout = ?";
+        PreparedStatement ps = con.prepareStatement(select);
+        ps.setString(1, login.getLogin()); 
+        ps.setDate(2, new java.sql.Date(checkIn.getTime()));
+        ps.setDate(3, new java.sql.Date(checkOut.getTime())); 
+        ResultSet result = ps.executeQuery();
+        result.next();
+        int getRes = result.getInt("countrows"); 
+        if (getRes > 0) {
+            result.close();
+            con.close();
+            return true;
+        }
+        result.close();
+        con.close();
+        return false;
+    }    
+    
+    public String deleteReservation() throws SQLException, ParseException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+        
+        if (!existsReservation()) {
+            return "tryAgain"; 
+        }
+        String delete = "delete from reservations where custlogin = ? and checkin = ?"
+            + " and checkout = ?";
+        PreparedStatement ps = con.prepareStatement(delete);
+        ps.setString(1, login.getLogin());
+        ps.setDate(2, new java.sql.Date(checkIn.getTime()));
+        ps.setDate(3, new java.sql.Date(checkOut.getTime()));
+        ps.executeUpdate();
+        ps.close();
+        con.commit();
+        con.close();
+        return "deleted";
     }
     
     public Integer findRoomNum() {
@@ -216,55 +286,9 @@ public class Reservations implements Serializable {
         } 
     }
     
-    public String deleteReservation() throws SQLException, ParseException {
-        Connection con = dbConnect.getConnection();
-
-        if (con == null) {
-            throw new SQLException("Can't get database connection");
-        }
-        con.setAutoCommit(false);
-        
-        if (!existsReservation()) {
-            return "tryAgain"; 
-        }
-        String delete = "delete from reservations where custlogin = ? and checkin = ?"
-            + " and checkout = ?";
-        PreparedStatement ps = con.prepareStatement(delete);
-        ps.setString(1, username);
-        ps.setDate(2, new java.sql.Date(checkIn.getTime()));
-        ps.setDate(3, new java.sql.Date(checkOut.getTime()));
-        ps.executeUpdate();
-        ps.close();
-        con.commit();
-        con.close();
-        return "deleted";
-    }
-    
-    private boolean existsReservation() throws SQLException {
-        Connection con = dbConnect.getConnection();
-        if (con == null) {
-            throw new SQLException("Can't get database connection");
-        }
-        
-        String select = "select count(*) countrows from reservations where "
-                + "custlogin = ? and checkin = ? and checkout = ?";
-        PreparedStatement ps = con.prepareStatement(select);
-        ps.setString(1, mylogin); 
-        ps.setDate(2, new java.sql.Date(checkIn.getTime()));
-        ps.setDate(3, new java.sql.Date(checkOut.getTime())); 
-        ResultSet result = ps.executeQuery();
-        result.next();
-        int getRes = result.getInt("countrows"); 
-        if (getRes > 0) {
-            result.close();
-            con.close();
-            return true;
-        }
-        result.close();
-        con.close();
-        return false;
-    }
-    
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                            JUST FOR EMPLOYEES  
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */    
     public Reservations getReservation() throws SQLException {
         Connection con = dbConnect.getConnection();
 
@@ -278,7 +302,7 @@ public class Reservations implements Serializable {
                 + " where custlogin = ? and checkin = ? and checkout = ?"
                 + " and r.roomnum = ?";
         PreparedStatement ps = con.prepareStatement(select);
-        ps.setString(1, mylogin);
+        ps.setString(1, username);
         ps.setDate(2, new java.sql.Date(checkIn.getTime()));
         ps.setDate(3, new java.sql.Date(checkOut.getTime()));
         ps.setInt(4, roomNum);
@@ -286,6 +310,8 @@ public class Reservations implements Serializable {
 
         result.next();
 
+        res.setResid(result.getInt("rid"));
+        res.setUsername(result.getString("custlogin")); 
         res.setCheckIn(result.getDate("checkin"));
         res.setCheckOut(result.getDate("checkout"));
         res.setRoomNum(result.getInt("roomnum"));
@@ -294,36 +320,118 @@ public class Reservations implements Serializable {
         return res;
     }
     
+    public Reservations checkedRoomNumber() throws SQLException {
+        Reservations res = new Reservations(); 
+        res.setRoomNum(roomNum); 
+        return res; 
+    }
+    
     public String checkInCustomer() throws SQLException {
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
             throw new SQLException("Can't get database connection");
         } 
-        String select = "select * from reservations r join rooms rm on "
-                + "(r.roomnum = rm.roomnum) where custlogin = ? and checkin = "
-                + "current_date;";
+        String select = "select * from reservations r join rooms rm on (r.roomnum = rm.roomnum) where custlogin = ? and checkin = current_date";
         PreparedStatement ps = con.prepareStatement(select); 
         ps.setString(1, username); 
         ResultSet rs = ps.executeQuery(); 
         rs.next();
         setCheckIn(rs.getDate("checkin"));
         setCheckOut(rs.getDate("checkout"));
-        setRoomNum(rs.getInt("roomnum")); /* why is this telling me that resultset is not positioned properly */ 
+        setRoomNum(rs.getInt("roomnum"));
         rs.close();
         con.close();
         return "checkedIn";
     }
     
-    /*public String checkOutCustomer() throws SQLException {
+    public String checkOutCustomer() throws SQLException {
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
         
+        return "checkedOut";
+    }
+    
+    public String createEReservation() throws SQLException, ParseException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+
+        Statement statement = con.createStatement();
         
-    }*/
+        String insert = "insert into reservations (custlogin, checkin, checkout,"
+                + " roomnum) values (?,?,?,?)";
+        
+        int findRoom = findRoomNum();
+        if (findRoom == 0) {
+            return "badReservation";
+        }
+        PreparedStatement preparedStatement = con.prepareStatement(insert);
+        preparedStatement.setString(1, username); 
+        preparedStatement.setDate(2, new java.sql.Date(checkIn.getTime()));
+        preparedStatement.setDate(3, new java.sql.Date(checkOut.getTime()));
+        preparedStatement.setInt(4, roomNum);
+        preparedStatement.executeUpdate();
+        statement.close();
+        con.commit();
+        con.close();
+        return "successful";
+    }
+
+    private boolean existsEReservation() throws SQLException {
+        Connection con = dbConnect.getConnection();
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        
+        String select = "select count(*) countrows from reservations where "
+                + "custlogin = ? and checkin = ? and checkout = ?";
+        PreparedStatement ps = con.prepareStatement(select);
+        ps.setString(1, username); 
+        ps.setDate(2, new java.sql.Date(checkIn.getTime()));
+        ps.setDate(3, new java.sql.Date(checkOut.getTime())); 
+        ResultSet result = ps.executeQuery();
+        result.next();
+        int getRes = result.getInt("countrows"); 
+        if (getRes > 0) {
+            result.close();
+            con.close();
+            return true;
+        }
+        result.close();
+        con.close();
+        return false;
+    }    
+    
+    public String deleteEReservation() throws SQLException, ParseException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+        
+        if (!existsEReservation()) {
+            return "tryAgain"; 
+        }
+        String delete = "delete from reservations where custlogin = ? and checkin = ?"
+            + " and checkout = ?";
+        PreparedStatement ps = con.prepareStatement(delete);
+        ps.setString(1, username);
+        ps.setDate(2, new java.sql.Date(checkIn.getTime()));
+        ps.setDate(3, new java.sql.Date(checkOut.getTime()));
+        ps.executeUpdate();
+        ps.close();
+        con.commit();
+        con.close();
+        return "deleted";
+    }    
     
     public String goBack() {
         return "goBack";
