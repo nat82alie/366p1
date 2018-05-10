@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.el.ELContext;
 import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
@@ -39,6 +40,18 @@ public class Employee implements Serializable {
     private String email;
     private String phone;
     private boolean isAdmin;
+    private String myLogin;
+
+    public String getMyLogin() {
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
+        return login.getLogin();
+    }
+
+    public void setMyLogin(String myLogin) {
+        this.myLogin = myLogin;
+    }
+    
 
     //this method gets by numerical id, but we grab by login, so not sure if we need this ish
     public String getEmployeeID() throws SQLException {
@@ -75,11 +88,11 @@ public class Employee implements Serializable {
     }
 
     public String getName() {
-        // ELContext elContext = FacesContext.getCurrentInstance().getELContext();
-    //Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
+         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+    Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
     
-      //  return login.getLogin();
-           return name;
+        return login.getLogin();
+         //  return name;
     }
 
     public void setName(String name) {
@@ -254,5 +267,22 @@ public class Employee implements Serializable {
         result.close();
         con.close();
         return false;
+    }
+    
+    public void changepass() throws SQLException {
+        DBConnect dbc = new DBConnect();
+        Connection con = dbc.getConnection();
+        con.setAutoCommit(false);
+        
+        String updateSql = "UPDATE Employees SET Pwd = ? WHERE Login = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(updateSql)) {
+            pstmt.setString(1, pwd);
+            pstmt.setString(2, myLogin);
+            
+            pstmt.executeUpdate();
+            con.commit();
+        } catch (SQLException e) {
+	con.rollback();
+	}
     }
 }

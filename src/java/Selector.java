@@ -19,9 +19,7 @@ public class Selector implements Serializable {
 
     private String[] choices;
     private String[] adminChoices = {"Change Your Password", "View Room Prices", "Change Room Prices",
-        "Add Employee", "Delete Employee", "Show All Customers", "Add A Customer", "Delete A Customer",
-        "Check In A Customer", "Check Out A Customer", "Add Charges To A Reservation",
-        "View A Reservation", "Create A Reservation", "Cancel A Reservation"};
+        "Add Employee", "Delete Employee"};
     private String[] employeeChoices = {"Change Your Password", "Show All Customers", "Add A Customer",
         "Delete A Customer", "View Room Prices", "Check In A Customer", "Check Out A Customer",
         "Add Charges To A Reservation", "View A Reservation", "Create A Reservation", "Cancel A Reservation"};
@@ -76,27 +74,27 @@ public class Selector implements Serializable {
             case "Delete Employee": //a
                 return "deleteEmpl";
 
-            case "Show All Customers": //a,e
+            case "Show All Customers": //e
                 return "showAllCustomers";
             case "Change Your Password": //a,e
                 return "changePwd";
             case "View Room Prices": //a,e
                 return "roomPrices";
-            case "Add A Customer": //a,e
+            case "Add A Customer": //e
                 return "addCustomer";
-            case "Delete A Customer": //a,e
+            case "Delete A Customer": //e
                 return "deleteCustomer";
-            case "Check In A Customer": //a,e
+            case "Check In A Customer": //e
                 return "checkInCustomer";
-            case "Check Out A Customer": //a,e
+            case "Check Out A Customer": //e
                 return "checkOutCustomer";
-            case "Add Charges To A Reservation": //a,e
+            case "Add Charges To A Reservation": //e
                 return "addCharges";
-            case "View A Reservation": //a,e
+            case "View A Reservation": //e
                 return "viewReservation";
-            case "Create A Reservation": //a,e
+            case "Create A Reservation": //e
                 return "createReservation";
-            case "Cancel A Reservation": //a,e
+            case "Cancel A Reservation": //e
                 return "cancelReservation";
                 
             case "Check Your Reservations": //customer

@@ -21,7 +21,16 @@
             <property-name>login</property-name>
             <value>#{login}</value>
         </managed-property>
-    </managed-bean>    
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>employee</managed-bean-name>
+        <managed-bean-class>Employee</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>login</property-name>
+            <value>#{login}</value>
+        </managed-property>
+    </managed-bean>      
     <managed-bean>
         <managed-bean-name>login</managed-bean-name>
         <managed-bean-class>Login</managed-bean-class>
