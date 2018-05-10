@@ -1,16 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Cancel Reservation</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO: Cancel Reservation</div>
-    </body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <title>Cancel Reservation</title>
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
+        <h1>Cancel Reservation</h1>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:panelGrid columns="1">
+                Login: <h:inputText value="#{reservations.username}" required="true"/>
+                Check In Date: <h:inputText value="#{reservations.checkIn}" required ="true"
+                                   requiredMessage="You must enter your check in date"
+                                   converterMessage="Illegal date (should be mm-dd-yyyy)"
+                                   id="checkInDate">
+                    <f:convertDateTime pattern="MM-dd-yyyy"/>
+                </h:inputText>
+                <h:message for="checkInDate" style="color:red;margin:8px;"/>
+
+                Check Out Date: <h:inputText value="#{reservations.checkOut}" required ="true"
+                                   requiredMessage="You must enter your check out date"
+                                   converterMessage="Illegal date (should be mm-dd-yyyy)"
+                                   id="checkOutDate">
+                    <f:convertDateTime pattern="MM-dd-yyyy"/>
+                </h:inputText>
+                <h:message for="checkOutDate" style="color:red;margin:8px;"/>
+                
+                <h:commandButton value="Go" action="#{reservations.deleteReservation}"/>
+            </h:panelGrid>
+        </h:form>
+        
+    </h:body>
 </html>

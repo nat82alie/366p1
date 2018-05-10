@@ -3,16 +3,11 @@ import java.sql.*;
 import java.text.*;
 import java.util.*;
 import javax.annotation.ManagedBean;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 import javax.el.ELContext;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.component.UIInput;
 
 @Named(value = "reservations")
 @SessionScoped
@@ -32,6 +27,7 @@ public class Reservations implements Serializable {
     
     private DBConnect dbConnect = new DBConnect();
     private String mylogin;
+    private String username; 
     private java.util.Date checkIn;
     private java.util.Date checkOut; 
     private String view;
@@ -41,11 +37,21 @@ public class Reservations implements Serializable {
     public String getMylogin() {
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
+        //setUsername(login.getLogin()); 
         return login.getLogin();
     }
     
     public void setMylogin(String mylogin) {
         this.mylogin = mylogin;
+        //username = mylogin; 
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
     
     public java.util.Date getCheckIn() {
@@ -110,7 +116,7 @@ public class Reservations implements Serializable {
                 + "(r.roomnum = rms.roomnum) join bedinfo on (bedid = id)"
                 + "where custlogin = ?";
         PreparedStatement ps = con.prepareStatement(select);
-        ps.setString(1, login.getLogin()); 
+        ps.setString(1, username); 
         ResultSet result = ps.executeQuery();
         
         List<Reservations> list = new ArrayList<Reservations>();
@@ -153,7 +159,7 @@ public class Reservations implements Serializable {
             return "badReservation";
         }
         PreparedStatement preparedStatement = con.prepareStatement(insert);
-        preparedStatement.setString(1, mylogin); 
+        preparedStatement.setString(1, username); 
         preparedStatement.setDate(2, new java.sql.Date(checkIn.getTime()));
         preparedStatement.setDate(3, new java.sql.Date(checkOut.getTime()));
         preparedStatement.setInt(4, roomNum);
@@ -235,7 +241,7 @@ public class Reservations implements Serializable {
         String delete = "delete from reservations where custlogin = ? and checkin = ?"
             + " and checkout = ?";
         PreparedStatement ps = con.prepareStatement(delete);
-        ps.setString(1, mylogin);
+        ps.setString(1, username);
         ps.setDate(2, new java.sql.Date(checkIn.getTime()));
         ps.setDate(3, new java.sql.Date(checkOut.getTime()));
         ps.executeUpdate();
@@ -254,7 +260,7 @@ public class Reservations implements Serializable {
         String select = "select count(*) countrows from reservations where "
                 + "custlogin = ? and checkin = ? and checkout = ?";
         PreparedStatement ps = con.prepareStatement(select);
-        ps.setString(1, mylogin); 
+        ps.setString(1, username); 
         ps.setDate(2, new java.sql.Date(checkIn.getTime()));
         ps.setDate(3, new java.sql.Date(checkOut.getTime())); 
         ResultSet result = ps.executeQuery();
@@ -283,7 +289,7 @@ public class Reservations implements Serializable {
                 + " where custlogin = ? and checkin = ? and checkout = ?"
                 + " and r.roomnum = ?";
         PreparedStatement ps = con.prepareStatement(select);
-        ps.setString(1, mylogin);
+        ps.setString(1, username);
         ps.setDate(2, new java.sql.Date(checkIn.getTime()));
         ps.setDate(3, new java.sql.Date(checkOut.getTime()));
         ps.setInt(4, roomNum);

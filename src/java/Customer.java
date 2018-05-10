@@ -170,12 +170,13 @@ public class Customer implements Serializable {
         }
         con.setAutoCommit(false);
 
-        Statement statement = con.createStatement();
-        statement.executeUpdate("Delete from Customers where login = " + userLogin);
-        statement.close();
+        String delete = "delete from customers where login = ?"; 
+        PreparedStatement ps = con.prepareStatement(delete); 
+        ps.setString(1, userLogin); 
+        ps.executeUpdate();
         con.commit();
         con.close();
-        return "main";
+        return "done";
     }
 
     public List<Customer> getCustomerList() throws SQLException {
@@ -187,7 +188,7 @@ public class Customer implements Serializable {
         }
 
         PreparedStatement ps = con.prepareStatement(
-            "select login, FName, LName, email, address from customers order by LName");
+            "select login, FName, LName, email, address, expdate from customers order by LName");
 
         //get customer data from database
         ResultSet result = ps.executeQuery();
@@ -203,7 +204,7 @@ public class Customer implements Serializable {
             cust.setLName(result.getString("LName"));
             cust.setEmail(result.getString("email"));
             cust.setAddress(result.getString("address"));
-            //cust.setCreated_date(result.getDate("created_date"));
+            cust.setExpdate(result.getDate("expdate"));
 
             //store all data into a List
             list.add(cust);

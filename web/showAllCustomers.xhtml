@@ -12,17 +12,17 @@
         <h:dataTable value="#{customer.getCustomerList()}" var="c" border="1">
             <h:column>
                 <f:facet name="header"> Customer Login </f:facet>
-                    #{c.getLoginUser()}
+                    #{c.userLogin}
             </h:column>
 
             <h:column>
                 <f:facet name="header"> First Name </f:facet>
-                    #{c.fname}
+                    #{c.FName}
             </h:column>
             
             <h:column>
                 <f:facet name="header"> Last Name </f:facet>
-                    #{c.lname}
+                    #{c.LName}
             </h:column>
             
             <h:column>
@@ -36,8 +36,8 @@
             </h:column>
 
             <h:column>
-                <f:facet name="header">Created Date</f:facet>
-                    #{c.created_date}
+                <f:facet name="header">Expiration Date</f:facet>
+                    #{c.expdate}
             </h:column>
         </h:dataTable>
     </h:body>
