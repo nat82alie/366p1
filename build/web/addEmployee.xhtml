@@ -1,16 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Add Employee</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO: Add Employee</div>
-    </body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <title>New Customer</title>
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <h1>New Employee</h1>
+    </h:head>
+    <h:body>
+        <h:form>
+            
+            <h:panelGrid columns="1">
+                
+                Username: <h:inputText value="#{employee.emplID}" required ="true"
+                                      requiredMessage="Your must create a login"
+                                      validator="#{employee.validateEmployeeID}"
+                                      validatorMessage="username already exists"
+                                      id="userLogin"/>
+                <h:message for="userLogin" style="color:red;margin:8px;"/>
+                
+                Password: <h:inputText value="#{employee.pwd}" required ="true"
+                                      requiredMessage="Your must create a password"
+                                      validatorMessage="Password must be at least eight characters"
+                                      id="userPassword">
+                    <f:validateLength minimum="8"/>
+                </h:inputText>
+                <h:message for="userPassword" style="color:red;margin:8px;"/>
+
+                Name: <h:inputText value="#{employee.name}" required ="true"
+                                   requiredMessage="Your must enter a name"
+                                   id="Name">
+                </h:inputText>
+                <h:message for="Name" style="color:red;margin:8px;"/>
+                
+                Email: <h:inputText value="#{employee.email}" required ="true"
+                                   requiredMessage="Your must enter an email"
+                                   id="Email">
+                </h:inputText>
+                <h:message for="Email" style="color:red;margin:8px;"/>
+
+                Phone: <h:inputText value="#{employee.phone}" required ="true"
+                                      requiredMessage="Your must enter  employee phone number"
+                                      validatorMessage="Number must be at least 10 numbers"
+                                      id="Phone">
+                    <f:validateLength minimum="10"/>
+                </h:inputText>
+                <h:message for="Phone" style="color:red;margin:8px;"/>
+                
+            </h:panelGrid>
+            
+            <h:panelGrid>
+                <h:commandButton value="Create" action="#{employee.createEmployee}"/>
+            </h:panelGrid>
+        
+        </h:form>
+    </h:body>
 </html>

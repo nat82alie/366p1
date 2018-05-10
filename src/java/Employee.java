@@ -54,28 +54,28 @@ public class Employee implements Serializable {
     
 
     //this method gets by numerical id, but we grab by login, so not sure if we need this ish
-    public String getEmployeeID() throws SQLException {
-        if (emplID == null) {
-            Connection con = dbConnect.getConnection();
+    public String getEmplID() {
+    //    if (emplID == null) {
+    //        Connection con = dbConnect.getConnection();
 
-            if (con == null) {
-                throw new SQLException("Can't get database connection");
-            }
+    //        if (con == null) {
+    //            throw new SQLException("Can't get database connection");
+    //        }
 
-            PreparedStatement ps
-                    = con.prepareStatement("select Login from Employee");
-            ResultSet result = ps.executeQuery();
-            if (!result.next()) {
-                return null;
-            }
-            emplID = result.getString("Login");
-            result.close();
-            con.close();
-        }
+    //        PreparedStatement ps
+    //                = con.prepareStatement("select Login from Employee");
+    //       ResultSet result = ps.executeQuery();
+    //        if (!result.next()) {
+    //            return null;
+    //        }
+    //        emplID = result.getString("Login");
+    //        result.close();
+    //        con.close();
+    //    }
         return emplID;
     }
 
-    public void setEmployeeID(String emplID) {
+    public void setEmplID(String emplID) {
         this.emplID = emplID;
     }
     
@@ -133,13 +133,13 @@ public class Employee implements Serializable {
 
         Statement statement = con.createStatement();
 
-        PreparedStatement preparedStatement = con.prepareStatement("Insert into Employee values(?,?,?,?,?,?)");
+        PreparedStatement preparedStatement = con.prepareStatement("Insert into Employees values(?,?,?,?,?,?)");
         preparedStatement.setString(1, emplID);
         preparedStatement.setString(2, pwd);
         preparedStatement.setString(3, name);
         preparedStatement.setString(4, email);
         preparedStatement.setString(5, phone);
-        preparedStatement.setBoolean(6, isAdmin);
+        preparedStatement.setBoolean(6, false);
         preparedStatement.executeUpdate();
         statement.close();
         con.commit();
@@ -157,7 +157,7 @@ public class Employee implements Serializable {
         con.setAutoCommit(false);
 
         Statement statement = con.createStatement();
-        statement.executeUpdate("Delete from Employee where Login = " + emplID);
+        statement.executeUpdate("Delete from Employees where Login = " + emplID);
         statement.close();
         con.commit();
         con.close();
@@ -178,7 +178,7 @@ public class Employee implements Serializable {
 
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select * from Employee where Login = " + emplID);
+                        "select * from Employees where Login = " + emplID);
 
         //get employee data from database
         ResultSet result = ps.executeQuery();
@@ -213,7 +213,7 @@ public class Employee implements Serializable {
         while (result.next()) {
             Employee emp = new Employee();
 
-            emp.setEmployeeID(result.getString("Login"));
+            emp.setEmplID(result.getString("Login"));
             emp.setPwd(result.getString("Pwd"));
             emp.setName(result.getString("Name"));
             emp.setEmail(result.getString("Email"));
@@ -232,7 +232,7 @@ public class Employee implements Serializable {
             throws ValidatorException, SQLException {
 
         if (!existsEmployeeId((String) value)) {
-            FacesMessage errorMessage = new FacesMessage("ID does not exist");
+            FacesMessage errorMessage = new FacesMessage("ID does not exists");
             throw new ValidatorException(errorMessage);
         }
     }
@@ -256,7 +256,7 @@ public class Employee implements Serializable {
             throw new SQLException("Can't get database connection");
         }
 
-        PreparedStatement ps = con.prepareStatement("select * from Employee where Login = " + id);
+        PreparedStatement ps = con.prepareStatement("select * from Employees where Login = '" + id + "'");
 
         ResultSet result = ps.executeQuery();
         if (result.next()) {
