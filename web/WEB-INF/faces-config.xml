@@ -21,7 +21,16 @@
             <property-name>login</property-name>
             <value>#{login}</value>
         </managed-property>
-    </managed-bean>    
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>reservations</managed-bean-name>
+        <managed-bean-class>Reservations</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>login</property-name>
+            <value>#{login}</value>
+        </managed-property>
+    </managed-bean>        
     <managed-bean>
         <managed-bean-name>login</managed-bean-name>
         <managed-bean-class>Login</managed-bean-class>
@@ -108,6 +117,35 @@
         <navigation-case>
             <from-outcome>showAllCustomers</from-outcome>
             <to-view-id>/showAllCustomers.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- to show successful/unsuccessful reservation --> 
+    <navigation-rule> 
+        <from-view-id>
+            /newReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>successful</from-outcome>
+            <to-view-id>/successfulReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule> 
+        <from-view-id>
+            /newReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>badReservation</from-outcome>
+            <to-view-id>/badReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule> 
+        <from-view-id>
+            /badReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>goBack</from-outcome>
+            <to-view-id>/newReservation.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     
