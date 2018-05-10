@@ -345,7 +345,7 @@ public class Reservations implements Serializable {
         return "checkedIn";
     }
     
-    public String checkOutCustomer() throws SQLException {
+    /*public String checkOutCustomer() throws SQLException {
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
@@ -353,7 +353,7 @@ public class Reservations implements Serializable {
         }
         
         return "checkedOut";
-    }
+    }*/
     
     public String createEReservation() throws SQLException, ParseException {
         Connection con = dbConnect.getConnection();
