@@ -2,7 +2,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:singleReservation = "http://xmlns.jcp.org/jsf/composite/ezcomp"
       xmlns:f="http://java.sun.com/jsf/core">
     <title>Cancel Reservation</title>
     <h:head>
@@ -11,10 +10,27 @@
     </h:head>
     <h:body>
         <h:form>
-            <singleReservation:getReservation/>
-            <h:panelGrid>
+            <h:panelGrid columns="1">
+                Login: <h:inputText value="#{reservations.mylogin}" required="true"/>
+                Check In Date: <h:inputText value="#{reservations.checkIn}" required ="true"
+                                   requiredMessage="You must enter your check in date"
+                                   converterMessage="Illegal date (should be mm-dd-yyyy)"
+                                   id="checkInDate">
+                    <f:convertDateTime pattern="MM-dd-yyyy"/>
+                </h:inputText>
+                <h:message for="checkInDate" style="color:red;margin:8px;"/>
+
+                Check Out Date: <h:inputText value="#{reservations.checkOut}" required ="true"
+                                   requiredMessage="You must enter your check out date"
+                                   converterMessage="Illegal date (should be mm-dd-yyyy)"
+                                   id="checkOutDate">
+                    <f:convertDateTime pattern="MM-dd-yyyy"/>
+                </h:inputText>
+                <h:message for="checkOutDate" style="color:red;margin:8px;"/>
+                
                 <h:commandButton value="Go" action="#{reservations.deleteReservation}"/>
             </h:panelGrid>
         </h:form>
+        
     </h:body>
 </html>

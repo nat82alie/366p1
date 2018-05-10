@@ -158,6 +158,44 @@
         </navigation-case>
     </navigation-rule>
     
+    <!-- successful/unsuccsesful cancel reservation -->
+    <navigation-rule> 
+        <from-view-id>
+            /cancelYourReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>tryAgain</from-outcome>
+            <to-view-id>/cannotDeleteReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule> 
+        <from-view-id>
+            /cancelYourReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>deleted</from-outcome>
+            <to-view-id>/deletedReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule> 
+        <from-view-id>
+            /cannotDeleteReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>tryAgain</from-outcome>
+            <to-view-id>/cancelYourReservation.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule> 
+        <from-view-id>
+            /deletedReservation.xhtml
+        </from-view-id>
+        <navigation-case>  
+            <from-outcome>goHome</from-outcome>
+            <to-view-id>/start.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
 <!--might need:
     <navigation-rule>
         <from-view-id>
