@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Listed Room Prices</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO: Listed Room Prices!!</div>
-    </body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <h1>RoomPrice</h1>
+    </h:head>
+
+    <h:body>
+        <h:dataTable value="#{roomprices.getRoomPriceList()}" var="r" border="1">
+            <h:column>
+                <f:facet name="header"> Price ID </f:facet>
+                    #{r.id}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header"> Room Number </f:facet>
+                    #{r.roomnum}
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header"> Price </f:facet>
+                    #{r.price}
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header"> Date </f:facet>
+                    #{r.date}
+            </h:column>
+            
+        </h:dataTable>
+    </h:body>
 </html>
