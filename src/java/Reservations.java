@@ -145,9 +145,11 @@ public class Reservations implements Serializable {
 
         Statement statement = con.createStatement();
         
-        String insert = "insert into reservations (custlogin, checkin, checkout, roomnum) values (?,?,?,?)";
+        String insert = "insert into reservations (custlogin, checkin, checkout,"
+                + " roomnum) values (?,?,?,?)";
         
-        if (findRoomNum() == 0) {
+        int findRoom = findRoomNum();
+        if (findRoom == 0) {
             return "badReservation";
         }
         PreparedStatement preparedStatement = con.prepareStatement(insert);
@@ -160,11 +162,9 @@ public class Reservations implements Serializable {
         statement.close();
         con.commit();
         con.close();
-        //Util.invalidateUserSession();
         return "successful";
     }
     
-    /* not iterating through each available room and idk why */ 
     public Integer findRoomNum() {
         try (Connection con = dbConnect.getConnection()) {
             con.setAutoCommit(false); 
@@ -176,23 +176,40 @@ public class Reservations implements Serializable {
                 bed = 2; 
             }
             
-            String select = "select * from rooms where bedid = ? and roomview = ?";
+            String select = "select * from rooms where bedid = ? and roomview ="
+                    + " ? and roomnum not in (select roomnum from reservations "
+                    + "where checkin between ? and ? and checkout between ? and "
+                    + "?)";
             PreparedStatement ps = con.prepareStatement(select); 
             ps.setInt(1, bed);
             ps.setString(2, view);
+            ps.setDate(3, new java.sql.Date(checkIn.getTime()));
+            ps.setDate(4, new java.sql.Date(checkOut.getTime()));
+            ps.setDate(5, new java.sql.Date(checkIn.getTime()));
+            ps.setDate(6, new java.sql.Date(checkOut.getTime()));
             ResultSet result = ps.executeQuery();
             
-            result.next();
-            setRoomNum(result.getInt("roomnum")); 
-            if (!reserved()) {
-                return 1; 
-            }
+            select = "select count(*) countrows from rooms where bedid = ? and roomview ="
+                    + " ? and roomnum not in (select roomnum from reservations "
+                    + "where checkin between ? and ? and checkout between ? and "
+                    + "?)";
+            PreparedStatement ps2 = con.prepareStatement(select); 
+            ps2.setInt(1, bed);
+            ps2.setString(2, view);
+            ps2.setDate(3, new java.sql.Date(checkIn.getTime()));
+            ps2.setDate(4, new java.sql.Date(checkOut.getTime()));
+            ps2.setDate(5, new java.sql.Date(checkIn.getTime()));
+            ps2.setDate(6, new java.sql.Date(checkOut.getTime()));
+            ResultSet result2 = ps2.executeQuery();
+            result2.next(); 
             
-            while (result.next()) {
-                setRoomNum(result.getInt("roomnum")); 
-                if (!reserved()) {
-                    return 1; 
-                }
+            int roomsAvailable = result2.getInt("countrows"); 
+            if (roomsAvailable > 0) {
+                result.next(); 
+                setRoomNum(result.getInt("roomnum"));
+                con.commit();
+                con.close(); 
+                return 1;
             }
             
             con.commit();
@@ -202,42 +219,6 @@ public class Reservations implements Serializable {
             System.out.println("Can't get database connection"); 
             return 0; 
         } 
-    }
-    
-    public boolean reserved() throws SQLException {
-        Connection con = dbConnect.getConnection();
-
-        if (con == null) {
-            throw new SQLException("Can't get database connection");
-        }
-        con.setAutoCommit(false);
-
-        Statement statement = con.createStatement();
-        
-        String select = "select count(*) as countrows from reservations where roomnum = ? and"
-                + " checkin between ? and ? or checkout between ? and ?";
-        
-        PreparedStatement preparedStatement = con.prepareStatement(select);
-        preparedStatement.setInt(1, roomNum); 
-        preparedStatement.setDate(2, new java.sql.Date(checkIn.getTime()));
-        preparedStatement.setDate(3, new java.sql.Date(checkOut.getTime()));
-        preparedStatement.setDate(4, new java.sql.Date(checkIn.getTime()));
-        preparedStatement.setDate(5, new java.sql.Date(checkOut.getTime()));
-        ResultSet rs = preparedStatement.executeQuery();
-        rs.next(); 
-        int getRes = rs.getInt("countrows"); 
-        if (getRes == 0) {
-            statement.close();
-            con.commit();
-            con.close();
-            return false; 
-        }
-
-        statement.close();
-        con.commit();
-        con.close();
-        
-        return true;
     }
     
     public String deleteReservation() throws SQLException, ParseException {
@@ -299,7 +280,8 @@ public class Reservations implements Serializable {
         Reservations res = new Reservations(); 
         String select = "select * from reservations r join rooms rm on "
                 + "(r.roomnum = rm.roomnum) join bedinfo on (bedid = id)"
-                + " where custlogin = ? and checkin = ? and checkout = ?";
+                + " where custlogin = ? and checkin = ? and checkout = ?"
+                + " and r.roomnum = ?";
         PreparedStatement ps = con.prepareStatement(select);
         ps.setString(1, mylogin);
         ps.setDate(2, new java.sql.Date(checkIn.getTime()));

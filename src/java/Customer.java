@@ -54,20 +54,6 @@ public class Customer implements Serializable {
     }
     
     public String getFName() {
-        if (fname == null) {
-            try(Connection con = dbConnect.getConnection()) {
-                PreparedStatement ps = con.prepareStatement("select fname from customer");
-                ResultSet result = ps.executeQuery();
-                if (!result.next()) {
-                    return null;
-                }
-                fname = result.getString("fname"); 
-                result.close();
-                con.close();
-            } catch(SQLException e) {
-                System.out.println("Can't get database connection"); 
-            }
-        }
         return fname;
     }
 
@@ -76,20 +62,6 @@ public class Customer implements Serializable {
     }
     
     public String getLName() {
-        if (lname == null) {
-            try(Connection con = dbConnect.getConnection()) {
-                PreparedStatement ps = con.prepareStatement("select lname from customer");
-                ResultSet result = ps.executeQuery();
-                if (!result.next()) {
-                    return null;
-                }
-                lname = result.getString("lname"); 
-                result.close();
-                con.close();
-            } catch(SQLException e) {
-                System.out.println("Can't get database connection"); 
-            }
-        }
         return lname;
     }
     
@@ -98,20 +70,6 @@ public class Customer implements Serializable {
     }
     
     public String getEmail() {
-        if (email == null) {
-            try(Connection con = dbConnect.getConnection()) {
-                PreparedStatement ps = con.prepareStatement("select email from customer");
-                ResultSet result = ps.executeQuery();
-                if (!result.next()) {
-                    return null;
-                }
-                email = result.getString("email"); 
-                result.close();
-                con.close();
-            } catch(SQLException e) {
-                System.out.println("Can't get database connection"); 
-            }
-        }
         return email; 
     }
     
@@ -120,20 +78,6 @@ public class Customer implements Serializable {
     }
 
     public String getAddress() {
-        if (address == null) {
-            try(Connection con = dbConnect.getConnection()) {
-                PreparedStatement ps = con.prepareStatement("select address from customer");
-                ResultSet result = ps.executeQuery();
-                if (!result.next()) {
-                    return null;
-                }
-                address = result.getString("address"); 
-                result.close();
-                con.close();
-            } catch(SQLException e) {
-                System.out.println("Can't get database connection"); 
-            }
-        }
         return address;
     }
 
@@ -142,20 +86,6 @@ public class Customer implements Serializable {
     }
     
     public String getCCN() {
-        if (ccn == null) {
-            try(Connection con = dbConnect.getConnection()) {
-                PreparedStatement ps = con.prepareStatement("select ccn from customer");
-                ResultSet result = ps.executeQuery();
-                if (!result.next()) {
-                    return null;
-                }
-                ccn = result.getString("ccn"); 
-                result.close();
-                con.close();
-            } catch(SQLException e) {
-                System.out.println("Can't get database connection"); 
-            }
-        }
         return ccn;
     }
     
@@ -164,20 +94,6 @@ public class Customer implements Serializable {
     }
     
     public String getExpDate() {
-        if (exp_date == null) {
-            try(Connection con = dbConnect.getConnection()) {
-                PreparedStatement ps = con.prepareStatement("select expdate from customer");
-                ResultSet result = ps.executeQuery();
-                if (!result.next()) {
-                    return null;
-                }
-                exp_date = result.getString("expdate"); 
-                result.close();
-                con.close();
-            } catch(SQLException e) {
-                System.out.println("Can't get database connection"); 
-            }
-        }
         return exp_date;
     }
     
@@ -186,20 +102,6 @@ public class Customer implements Serializable {
     }
     
     public Integer getCRCCode() {
-        if (crccode == null) {
-            try(Connection con = dbConnect.getConnection()) {
-                PreparedStatement ps = con.prepareStatement("select crccode from customer");
-                ResultSet result = ps.executeQuery();
-                if (!result.next()) {
-                    return null;
-                }
-                crccode = result.getInt("crccode"); 
-                result.close();
-                con.close();
-            } catch(SQLException e) {
-                System.out.println("Can't get database connection"); 
-            }
-        }
         return crccode;
     }
     
