@@ -35,6 +35,15 @@ public class Reservations implements Serializable {
     private String view;
     private String bedType;
     private Integer roomNum; 
+    private Integer chargeid; 
+
+    public Integer getChargeid() {
+        return chargeid;
+    }
+
+    public void setChargeid(Integer chargeid) {
+        this.chargeid = chargeid;
+    }
 
     public String getMylogin() {
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
@@ -345,7 +354,7 @@ public class Reservations implements Serializable {
         return "checkedIn";
     }
     
-    /*public String checkOutCustomer() throws SQLException {
+    public String checkOutCustomer() throws SQLException {
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
@@ -353,7 +362,26 @@ public class Reservations implements Serializable {
         }
         
         return "checkedOut";
-    }*/
+    }
+    
+    public String addCharges() throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+        
+        String newCharge = "insert into extracharges (resid, chargeid) values (?, ?)";
+        PreparedStatement ps = con.prepareStatement(newCharge); 
+        ps.setInt(1, resid);
+        ps.setInt(2, chargeid);
+        ps.executeUpdate(); 
+        ps.close();
+        con.commit();
+        con.close();
+        return "chargeAdded";
+    }
     
     public String createEReservation() throws SQLException, ParseException {
         Connection con = dbConnect.getConnection();

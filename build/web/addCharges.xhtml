@@ -1,16 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Add Charges</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO: Add Charges</div>
-    </body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <title>New Charge</title>
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <h1>New Charge</h1>
+    </h:head>
+    <h:body>
+        <h:form>
+            
+            <h:panelGrid columns="1">
+                
+                Reservation ID: <h:inputText value="#{reservations.resid}" required ="true"
+                                      id="resID"/>
+                <h:message for="resID" style="color:red;margin:8px;"/>
+                
+                Charge Type ID: <h:inputText value="#{reservations.chargeid}" required ="true"
+                                      id="chargeID"/>
+                <h:message for="chargeID" style="color:red;margin:8px;"/>
+
+            </h:panelGrid>
+            
+            <h:panelGrid>
+                <h:commandButton value="Go" action="#{reservations.addCharges}"/>
+            </h:panelGrid>
+        
+        </h:form>
+    </h:body>
 </html>
+
